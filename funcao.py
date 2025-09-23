@@ -2,9 +2,9 @@ import sqlite3
 
 
 #Função para inserir os valores
-def inserir_dados(titulo, autor, ano): # tratar erros
+def inserir_dados(titulo, autor, ano):
     with sqlite3.connect("biblioteca.db") as conexao:
-        cursor = conexao.cursor
+        cursor = conexao.cursor()
 
     cursor.execute("""
     INSERT INTO livros (titulo, autor, ano)
@@ -16,7 +16,7 @@ def inserir_dados(titulo, autor, ano): # tratar erros
     print(f"Dados inseridos com sucesso!\nTITULO: {titulo}\nAUTOR: {autor}\nANO: {ano}")
 
 #Função para listar livros 
-def listar_livros(id, titulo, autor, ano, disponivel): #Alteração
+def listar_livros(): 
     with sqlite3.connect("biblioteca.db") as conexao:
         cursor = conexao.cursor
     try:
@@ -33,7 +33,7 @@ def listar_livros(id, titulo, autor, ano, disponivel): #Alteração
 def disponibilidade_livros(id):
     try:
         with sqlite3.connect("biblioteca.db") as conexao:
-            cursor = conexao.cursor
+            cursor = conexao.cursor()
 
         cursor.execute("SELECT disponivel FROM livros WHERE id = ?", id)
         resultado = cursor.fetchone()
@@ -50,13 +50,39 @@ def disponibilidade_livros(id):
         conexao.commit()
 
     except sqlite3.OperationalError:
-        print("A tabela ainda não foi criada. Cadastre livros primeiro")
+        print("A tabela ainda não foi criada. Cadastre livros primeiro.")
     except sqlite3.InterfaceError:
         print("O ID informado é invalido, tente novamente.")
     except Exception:
         print("Erro inexperado. Por favor, tente novamente mais tarde.")
 
+#Função para remover livros
+def remover_livros(id):
+    try:
+        with sqlite3.connect("biblioteca.db") as conexao:
+            cursor = conexao.cursor()
+
+        cursor.execute("DELETE FROM alunos WHERE id = ?", (id))
+
+        if cursor.rowcount == 0:
+            print(f"Nenhum livro encontrado com o ID: {id} na tabela.")
+        else:
+            print(f"Livro com o ID: {id} removido com sucesso.")
+
+        conexao.commit()
+    except Exception:
+        print("Erro inexperado. Por favor, tente novamente mais tarde.")
+    except sqlite3.InterfaceError:
+        print("O ID informado é invalido, tente novamente.")
+    except sqlite3.OperationalError:
+        print("A tabela ainda não foi criada. Cadastre livros primeiro.")
     
+    
+
+
+    
+
+
 
     
     
