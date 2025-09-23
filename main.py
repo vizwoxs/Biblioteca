@@ -14,3 +14,5 @@ CREATE TABLE IF NOT EXIST livros (
     disponivel TEXT CHECK(disponivel IN ('Sim', 'Não')) NOT NULL)
 """)
 
+
+
