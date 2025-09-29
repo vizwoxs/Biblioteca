@@ -54,6 +54,18 @@ elif menu == "Atualizar Disponibilidade":
     else:
         st.warning("Informe o título do livro.")
 
+#remover livro
+elif menu == ("Remover Livro"):
+    st.subheader("Eliminação de livros já existentes no sistema")
+    titulo = st.text_input("Digite o título do livro que deseja remover")
+    if st.button("Remover"):
+        if titulo:
+            resultado = fun.remover_livros(titulo)
+            st.success(resultado)
+        else:
+            st.warning("Informe o título do livro.")
+
+
 
 
 
