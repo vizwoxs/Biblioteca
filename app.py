@@ -41,6 +41,19 @@ elif menu == "Listar Livros":
     else:
         st.info("Nenhuma tabela criada")
 
+#Atualização
+elif menu == "Atualizar Disponibilidade":
+    st.subheader("Disponibilidade do Livro")
+    disponivel = st.text_input("Titulo do livro")
+
+    fun.disponibilidade_livros(disponivel)
+
+    if st.button("Atualizar"):
+        resultado = fun.disponibilidade_livros(disponivel)
+        st.success(resultado)
+    else:
+        st.warning("Informe o título do livro.")
+
 
 
 
