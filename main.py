@@ -26,6 +26,7 @@ while True:
 
     if escolha == 5:
         break
+
     elif escolha == 1:
         print("Cadastrar livro")        
         print("-" * 35)
@@ -34,12 +35,20 @@ while True:
         ano = input("Digite o ano de lançamento do livro: ")
         print("-" * 35)
 
-        dados = fun.inserir_dados(titulo, autor, ano)
-        print(dados)
     elif escolha == 2:
-        print("Livros cadastrados")
-        print("-" * 35)
         lista = fun.listar_livros()
+
+    elif escolha == 3:
+        print("-" * 35)
+        titulo = input("Digite o nome do livro: ").strip()
+        fun.disponibilidade_livros(titulo)
+
+    elif escolha == 4:
+        print("-" * 35)
+        excluir = input("Digite o nome do livro que deseja excluir: ").strip()
+        fun.remover_livros(excluir)
+
+
 
 
 

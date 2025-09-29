@@ -32,41 +32,37 @@ def listar_livros():
         print("O banco de dados está ocupado ou inacessível. Por favor, tente novamente mais tarde.") 
 
 #Função de alteração de disponibilidade do livro
-def disponibilidade_livros(id_livros):
+def disponibilidade_livros(titulo_livro):
     try:
         with sqlite3.connect("biblioteca.db") as conexao:
             cursor = conexao.cursor()
-            cursor.execute("SELECT disponivel FROM livros WHERE id = ?", (id_livros))
+            cursor.execute("SELECT disponivel FROM livros WHERE titulo = ?", (titulo_livro,))
             resultado = cursor.fetchone()
             if resultado is None:
-                print("Nenhum livro encontrado")
+                print("Nenhum livro encontrado com esse título.")
                 return
-        
-            estado_atual = resultado[0]
-            novo_estado = "Não" if estado_atual == "Sim" else "Sim" #ternário
-            cursor.execute("UPDATE livros SET disponivel = ? WHERE id = ?", (novo_estado, id_livros)) 
-            print(f"Disponibilidade do livro ID: {id_livros} alterada para: {novo_estado}")
 
-    except sqlite3.OperationalError:
-        print("A tabela ainda não foi criada. Cadastre livros primeiro.")
-    except sqlite3.InterfaceError:
-        print("O ID informado é invalido, tente novamente.")
+            estado_atual = resultado[0]
+            novo_estado = "Não" if estado_atual == "Sim" else "Sim"
+            cursor.execute("UPDATE livros SET disponivel = ? WHERE titulo = ?", (novo_estado, titulo_livro))
+            print(f"Disponibilidade do livro '{titulo_livro}' alterada para: {novo_estado}")
     except Exception:
-        print("Erro inexperado. Por favor, tente novamente mais tarde.")
+        print("Erro ao atualizar disponibilidade.")
+
 
 #Função para remover livros
-def remover_livros(id_livros):
+def remover_livros(titulo_livro):
     try:
         with sqlite3.connect("biblioteca.db") as conexao:
             cursor = conexao.cursor()
-            cursor.execute("DELETE FROM livros WHERE id = ?", (id_livros))
+            cursor.execute("DELETE FROM livros WHERE titulo = ?", (titulo_livro))
             if cursor.rowcount == 0:
-                print(f"Nenhum livro encontrado com o ID: {id_livros} na tabela.")
+                print(f"Nenhum livro encontrado com o nome: {titulo_livro} na tabela.")
             else:
-                print(f"Livro com o ID: {id_livros} removido com sucesso.")
+                print(f"Livro com o nome: {titulo_livro} removido com sucesso.")
 
     except sqlite3.InterfaceError:
-        print("O ID informado é invalido, tente novamente.")
+        print("O  informado é invalido, tente novamente.")
     except sqlite3.OperationalError:
         print("A tabela ainda não foi criada. Cadastre livros primeiro.")
     except Exception:
