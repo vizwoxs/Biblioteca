@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS livros (
     disponivel TEXT CHECK(disponivel IN ('Sim', 'Não')) NOT NULL
 )
 """)
+
 # Menu console
 while True:
     print()

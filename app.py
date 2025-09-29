@@ -1,20 +1,47 @@
-import funcao as fun
 import streamlit as st
+import funcao as fun
+
+
+fun.tabela()
 
 st.set_page_config(page_title="Biblioteca SENAI", layout="centered")
 st.title("Biblioteca SENAI")
+
 menu = st.sidebar.radio("Menu", ["Sobre", "Cadastrar Livro", "Listar Livros", "Atualizar Disponibilidade", "Remover Livro"])
 
+#Informações do sistema
+if menu == "Sobre":
+    st.markdown("""
+    ### Bem-vindo à Biblioteca SENAI!
+    Este sistema permite cadastrar, listar, atualizar e remover livros de forma simples e rápida.
+    Use o menu à esquerda para navegar pelas funcionalidades.
+    """)
+
 #Cadastrar livro
-if menu == "Cadastrar Livro":
+elif menu == "Cadastrar Livro":
     st.subheader("Cadastrar novo livro")
-    titulo = st.text_input("Titulo do Livro")
-    autor = st.text_input("Autor do livro")
-    ano = st.text_input("Ano de lançamento do livro")
+    titulo = st.text_input("Título do Livro")
+    autor = st.text_input("Autor do Livro")
+    ano = st.number_input("Ano de lançamento", min_value=0, max_value=2100, step=1)
 
     if st.button("Cadastrar"):
-        st.success("Livro cadastrado com sucesso")
         if titulo and autor:
             mensagem = fun.inserir_dados(titulo, autor, ano)
+            st.success(mensagem)
         else:
-            st.warning("Preencha todos os campos")
+            st.warning("Preencha todos os campos.")
+
+#Tabela de livro
+elif menu == "Listar Livros":
+    st.subheader("Livros cadastrados")
+    livros = fun.listar_livros()
+
+    if livros:
+        st.table(livros)
+    else:
+        st.info("Nenhuma tabela criada")
+
+
+
+
+

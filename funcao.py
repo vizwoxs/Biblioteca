@@ -1,8 +1,25 @@
 import sqlite3
 
+def tabela():
+    try:
+        with sqlite3.connect("biblioteca.db") as conexao:
+            cursor = conexao.cursor()
+            cursor.execute("""
+            CREATE TABLE IF NOT EXISTS livros (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                titulo TEXT NOT NULL,
+                autor TEXT NOT NULL,
+                ano INTEGER,
+                disponivel TEXT CHECK(disponivel IN ('Sim', 'Não')) NOT NULL
+            )
+            """)
+    except Exception as e:
+        print(f"Erro ao criar tabela: {e}")
+
 #Função para inserir os valores
 def inserir_dados(titulo, autor, ano):
     try:
+        tabela()
         with sqlite3.connect("biblioteca.db") as conexao:
             cursor = conexao.cursor()
             cursor.execute("""
@@ -18,14 +35,13 @@ def inserir_dados(titulo, autor, ano):
 #Função para listar livros 
 def listar_livros(): 
     try:
+        tabela()
         with sqlite3.connect("biblioteca.db") as conexao:
             cursor = conexao.cursor()
             cursor.execute("SELECT * FROM livros")
-            for linha in cursor.fetchall(): 
-                print("-" * 25)
-                print(f"\n10 > LISTA DE LIVROS\nID: {linha[0]} | TÍTULO: {linha[1]} | AUTOR: {linha[2]} | ANO: {linha[3]} | DISPONIBILIDADE: {linha[4]}")
-                print("-" * 25)
-
+            livros = cursor.fetchall() 
+            return livros
+            
     except sqlite3.OperationalError:
         print("Não foi possivel acessar o banco de dados, verifique se o arquivo existe ou esta corrompido.")
     except Exception:
@@ -34,6 +50,7 @@ def listar_livros():
 #Função de alteração de disponibilidade do livro
 def disponibilidade_livros(titulo_livro):
     try:
+        tabela()
         with sqlite3.connect("biblioteca.db") as conexao:
             cursor = conexao.cursor()
             cursor.execute("SELECT disponivel FROM livros WHERE titulo = ?", (titulo_livro,))
@@ -53,6 +70,7 @@ def disponibilidade_livros(titulo_livro):
 #Função para remover livros
 def remover_livros(titulo_livro):
     try:
+        tabela()
         with sqlite3.connect("biblioteca.db") as conexao:
             cursor = conexao.cursor()
             cursor.execute("DELETE FROM livros WHERE titulo = ?", (titulo_livro))
